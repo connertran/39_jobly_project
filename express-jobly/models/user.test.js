@@ -132,6 +132,7 @@ describe("findAll", function () {
         lastName: "U1L",
         email: "u1@email.com",
         isAdmin: false,
+        jobs: [],
       },
       {
         username: "u2",
@@ -139,6 +140,29 @@ describe("findAll", function () {
         lastName: "U2L",
         email: "u2@email.com",
         isAdmin: false,
+        jobs: [],
+      },
+    ]);
+  });
+  test("works after applying for jobs", async function () {
+    await User.jobApply({ username: "u1", job_id: 999999 });
+    const users = await User.findAll();
+    expect(users).toEqual([
+      {
+        username: "u1",
+        firstName: "U1F",
+        lastName: "U1L",
+        email: "u1@email.com",
+        isAdmin: false,
+        jobs: [{ job_id: 999999 }],
+      },
+      {
+        username: "u2",
+        firstName: "U2F",
+        lastName: "U2L",
+        email: "u2@email.com",
+        isAdmin: false,
+        jobs: [],
       },
     ]);
   });

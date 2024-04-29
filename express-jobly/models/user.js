@@ -110,6 +110,13 @@ class User {
            FROM users
            ORDER BY username`
     );
+    for (let user of result.rows) {
+      const jobs = await db.query(
+        `SELECT job_id from applications where username = $1`,
+        [user.username]
+      );
+      user.jobs = jobs.rows;
+    }
 
     return result.rows;
   }

@@ -87,6 +87,13 @@ describe("findAll", function () {
         equity: "0.1",
         companyHandle: "c3",
       },
+      {
+        id: expect.any(Number),
+        title: "job4",
+        salary: 400,
+        equity: "0",
+        companyHandle: "c3",
+      },
     ]);
   });
 
@@ -114,6 +121,13 @@ describe("findAll", function () {
         equity: "0.1",
         companyHandle: "c3",
       },
+      {
+        id: expect.any(Number),
+        title: "job4",
+        salary: 400,
+        equity: "0",
+        companyHandle: "c3",
+      },
     ]);
   });
   test("invalid title is passed in the query string", async function () {
@@ -136,6 +150,13 @@ describe("findAll", function () {
         title: "job3",
         salary: 300,
         equity: "0.1",
+        companyHandle: "c3",
+      },
+      {
+        id: expect.any(Number),
+        title: "job4",
+        salary: 400,
+        equity: "0",
         companyHandle: "c3",
       },
     ]);

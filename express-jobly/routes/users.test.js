@@ -154,6 +154,7 @@ describe("GET /users", function () {
           lastName: "U1L",
           email: "user1@user.com",
           isAdmin: false,
+          jobs: [],
         },
         {
           username: "u2",
@@ -161,6 +162,7 @@ describe("GET /users", function () {
           lastName: "U2L",
           email: "user2@user.com",
           isAdmin: true,
+          jobs: [],
         },
         {
           username: "u3",
@@ -168,6 +170,44 @@ describe("GET /users", function () {
           lastName: "U3L",
           email: "user3@user.com",
           isAdmin: false,
+          jobs: [],
+        },
+      ],
+    });
+  });
+
+  test("works for users, after applied for a job", async function () {
+    const application = await request(app)
+      .post("/users/u1/jobs/999999")
+      .set("authorization", `Bearer ${u2Token}`);
+    const resp = await request(app)
+      .get("/users")
+      .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body).toEqual({
+      users: [
+        {
+          username: "u1",
+          firstName: "U1F",
+          lastName: "U1L",
+          email: "user1@user.com",
+          isAdmin: false,
+          jobs: [{ job_id: 999999 }],
+        },
+        {
+          username: "u2",
+          firstName: "U2F",
+          lastName: "U2L",
+          email: "user2@user.com",
+          isAdmin: true,
+          jobs: [],
+        },
+        {
+          username: "u3",
+          firstName: "U3F",
+          lastName: "U3L",
+          email: "user3@user.com",
+          isAdmin: false,
+          jobs: [],
         },
       ],
     });

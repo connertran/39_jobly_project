@@ -91,6 +91,13 @@ describe("GET /jobs", function () {
           equity: "0",
           companyHandle: "c2",
         },
+        {
+          id: expect.any(Number),
+          title: "job4",
+          salary: 400,
+          equity: "0",
+          companyHandle: "c3",
+        },
       ],
     });
   });
