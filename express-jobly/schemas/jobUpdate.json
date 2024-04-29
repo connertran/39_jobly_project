@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "salary": {
+        "type": "integer"
+      },
+      "equity": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "company_handle": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": true
+  }
