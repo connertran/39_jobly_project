@@ -111,6 +111,34 @@ describe("POST /users", function () {
   });
 });
 
+describe("POST /users/:username/jobs/:id", function () {
+  test("words for admins and the correct user", async function () {
+    const resp = await request(app)
+      .post("/users/u1/jobs/999999")
+      .set("authorization", `Bearer ${u2Token}`);
+
+    expect(resp.statusCode).toEqual(201);
+    expect(resp.body).toEqual({
+      applied: "999999",
+    });
+  });
+
+  test("fails for not an admin or the correct user", async function () {
+    const resp = await request(app)
+      .post("/users/u2/jobs/999999")
+      .set("authorization", `Bearer ${u1Token}`);
+
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("bad request if invalid data", async function () {
+    const resp = await request(app)
+      .post("/users/u22/jobs/9999asdf99")
+      .set("authorization", `Bearer ${u1Token}`);
+
+    expect(resp.statusCode).toEqual(401);
+  });
+});
 /************************************** GET /users */
 
 describe("GET /users", function () {

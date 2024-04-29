@@ -65,7 +65,11 @@ describe("register", function () {
 
   test("works", async function () {
     let user = await User.register({
-      ...newUser,
+      username: newUser.username,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      is_admin: newUser.isAdmin,
       password: "password",
     });
     expect(user).toEqual(newUser);
@@ -77,9 +81,12 @@ describe("register", function () {
 
   test("works: adds admin", async function () {
     let user = await User.register({
-      ...newUser,
+      username: newUser.username,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      is_admin: true,
       password: "password",
-      isAdmin: true,
     });
     expect(user).toEqual({ ...newUser, isAdmin: true });
     const found = await db.query("SELECT * FROM users WHERE username = 'new'");
@@ -91,11 +98,19 @@ describe("register", function () {
   test("bad request with dup data", async function () {
     try {
       await User.register({
-        ...newUser,
+        username: newUser.username,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        is_admin: newUser.isAdmin,
         password: "password",
       });
       await User.register({
-        ...newUser,
+        username: newUser.username,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        is_admin: newUser.isAdmin,
         password: "password",
       });
       fail();
@@ -214,8 +229,7 @@ describe("update", function () {
 describe("remove", function () {
   test("works", async function () {
     await User.remove("u1");
-    const res = await db.query(
-        "SELECT * FROM users WHERE username='u1'");
+    const res = await db.query("SELECT * FROM users WHERE username='u1'");
     expect(res.rows.length).toEqual(0);
   });
 
@@ -225,6 +239,41 @@ describe("remove", function () {
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
+
+/************************************** jobApply */
+describe("apply for a job", function () {
+  test("works ", async function () {
+    await User.jobApply({ username: "u1", job_id: 999999 });
+    const res = await db.query(
+      "SELECT * FROM applications WHERE username='u1' AND job_id=999999"
+    );
+    expect(res.rows.length).toEqual(1);
+  });
+  test("not found if no such user", async function () {
+    try {
+      await User.jobApply({ username: "abcdefg", job_id: 999999 });
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+  test("not found if no such id", async function () {
+    try {
+      await User.jobApply({ username: "abcdefg", job_id: 0 });
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+  test("bad request error if data is duplicated", async function () {
+    try {
+      await User.jobApply({ username: "u1", job_id: 999999 });
+      await User.jobApply({ username: "u1", job_id: 999999 });
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
     }
   });
 });
